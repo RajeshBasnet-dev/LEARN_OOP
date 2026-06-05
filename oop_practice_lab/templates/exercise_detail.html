@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ exercise.title }} · OOP Practice Lab{% endblock %}
+{% block content %}
+<article class="panel">
+  <span class="badge {{ exercise.difficulty }}">{{ exercise.get_difficulty_display }}</span>
+  <h1>{{ exercise.title }}</h1>
+  <div class="tags">
+    {% for concept in exercise.concepts.all %}<span>{{ concept.name }}</span>{% endfor %}
+  </div>
+  <h2>Prompt</h2>
+  <p>{{ exercise.description|linebreaksbr }}</p>
+  <h2>Expected behavior</h2>
+  <p>{{ exercise.expected_behavior|linebreaksbr }}</p>
+  <h2>Checks</h2>
+  <ul class="check-list">
+    {% for test in exercise.testcase_set.all %}<li>{{ test.description }}</li>{% endfor %}
+  </ul>
+  {% if user.is_authenticated %}
+    <a class="button" href="{% url 'editor' exercise.id %}">Open editor</a>
+  {% else %}
+    <a class="button" href="{% url 'login' %}?next={% url 'editor' exercise.id %}">Login to start</a>
+  {% endif %}
+</article>
+{% endblock %}

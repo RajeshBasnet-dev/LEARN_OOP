@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Editor · {{ exercise.title }}{% endblock %}
+{% block extra_head %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+{% endblock %}
+{% block content %}
+<section class="editor-layout" data-exercise-id="{{ exercise.id }}">
+  <aside class="editor-prompt">
+    <span class="badge {{ exercise.difficulty }}">{{ exercise.get_difficulty_display }}</span>
+    <h1>{{ exercise.title }}</h1>
+    <h2>Description</h2>
+    <p>{{ exercise.description|linebreaksbr }}</p>
+    <h2>Expected behavior</h2>
+    <p>{{ exercise.expected_behavior|linebreaksbr }}</p>
+  </aside>
+  <section class="editor-workspace">
+    <form id="submission-form" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="exercise" value="{{ exercise.id }}">
+      <textarea id="starter-code" hidden>{{ exercise.starter_code }}</textarea>
+      <div id="editor" aria-label="Python code editor"></div>
+      <button class="button" type="submit">Submit solution</button>
+      <p id="submit-status" class="muted" role="status"></p>
+    </form>
+  </section>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/editor.js' %}"></script>
+{% endblock %}

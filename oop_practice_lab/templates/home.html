@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Exercises · OOP Practice Lab{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Python OOP practice</p>
+    <h1>Master object-oriented programming one AST-checked exercise at a time.</h1>
+    <p>Practice classes, encapsulation, inheritance, overriding, and polymorphism with safe structural feedback.</p>
+  </div>
+</section>
+
+<form class="filters" method="get">
+  <label>Difficulty
+    <select name="difficulty">
+      <option value="">All</option>
+      <option value="easy" {% if selected_difficulty == "easy" %}selected{% endif %}>Easy</option>
+      <option value="medium" {% if selected_difficulty == "medium" %}selected{% endif %}>Medium</option>
+      <option value="hard" {% if selected_difficulty == "hard" %}selected{% endif %}>Hard</option>
+    </select>
+  </label>
+  <label>Concept
+    <select name="concept">
+      <option value="">All</option>
+      {% for concept in concepts %}
+        <option value="{{ concept.name }}" {% if selected_concept == concept.name %}selected{% endif %}>{{ concept.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button class="button" type="submit">Apply filters</button>
+</form>
+
+<section class="grid">
+  {% for exercise in exercises %}
+    <article class="card exercise-card">
+      <div class="card-header">
+        <span class="badge {{ exercise.difficulty }}">{{ exercise.get_difficulty_display }}</span>
+        {% if exercise.id in completed_ids %}<span class="completed">✅ Solved</span>{% endif %}
+      </div>
+      <h2>{{ exercise.title }}</h2>
+      <p>{{ exercise.description|truncatewords:28 }}</p>
+      <div class="tags">
+        {% for concept in exercise.concepts.all %}<span>{{ concept.name }}</span>{% endfor %}
+      </div>
+      <a class="button ghost" href="{% url 'exercise-detail' exercise.id %}">View exercise</a>
+    </article>
+  {% empty %}
+    <p>No exercises match your filters.</p>
+  {% endfor %}
+</section>
+{% endblock %}

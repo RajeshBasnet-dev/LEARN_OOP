@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · OOP Practice Lab{% endblock %}
+{% block content %}
+<h1>Your learning dashboard</h1>
+<section class="stats-row">
+  <article class="stat"><strong>{{ total_submissions }}</strong><span>Submissions</span></article>
+  <article class="stat"><strong>{{ completed_count }}</strong><span>Completed</span></article>
+  <article class="stat"><strong>{{ avg_score }}%</strong><span>Average score</span></article>
+</section>
+
+<section class="panel">
+  <h2>Concept progress</h2>
+  {% for concept, values in concept_progress.items %}
+    <div class="progress-row">
+      <span>{{ concept }}</span>
+      <div class="progress"><span style="width: {{ values.percent }}%"></span></div>
+      <small>{{ values.percent }}%</small>
+    </div>
+  {% empty %}
+    <p>Submit an exercise to start tracking concept progress.</p>
+  {% endfor %}
+</section>
+
+<section class="panel">
+  <h2>Submission history</h2>
+  <table class="history-table" data-sortable="true">
+    <thead><tr><th>Exercise</th><th>Date</th><th>Score</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for submission in submissions %}
+        <tr>
+          <td>{{ submission.exercise.title }}</td>
+          <td>{{ submission.submitted_at|date:"Y-m-d H:i" }}</td>
+          <td>{{ submission.score|floatformat:2 }}</td>
+          <td>{{ submission.status }}</td>
+          <td><a href="{% url 'result' submission.id %}">View</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No submissions yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+<script>
+  document.querySelectorAll('th').forEach((header, index) => {
+    header.addEventListener('click', () => {
+      const tbody = header.closest('table').querySelector('tbody');
+      [...tbody.rows]
+        .sort((a, b) => a.cells[index].innerText.localeCompare(b.cells[index].innerText))
+        .forEach(row => tbody.appendChild(row));
+    });
+  });
+</script>
+{% endblock %}

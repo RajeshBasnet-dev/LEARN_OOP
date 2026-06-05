@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Result · {{ submission.exercise.title }}{% endblock %}
+{% block content %}
+<section class="panel result-panel">
+  <h1>{{ submission.exercise.title }} result</h1>
+  <div class="score-circle" style="--score: {{ submission.score|floatformat:2 }};">
+    <span>{{ score_percent }}%</span>
+    <small>score</small>
+  </div>
+  <ul class="feedback-list">
+    {% for item in submission.feedback.all %}
+      <li class="{{ item.level }}">{{ item.message }}</li>
+    {% endfor %}
+  </ul>
+  <div class="actions">
+    <a class="button ghost" href="{% url 'editor' submission.exercise.id %}">Try Again</a>
+    {% if next_exercise %}<a class="button" href="{% url 'editor' next_exercise.id %}">Next Exercise</a>{% endif %}
+  </div>
+</section>
+{% endblock %}
