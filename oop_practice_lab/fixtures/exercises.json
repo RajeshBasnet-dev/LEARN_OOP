@@ -1,0 +1,65 @@
+[
+  {"model": "exercises.oopconcept", "pk": 1, "fields": {"name": "classes"}},
+  {"model": "exercises.oopconcept", "pk": 2, "fields": {"name": "encapsulation"}},
+  {"model": "exercises.oopconcept", "pk": 3, "fields": {"name": "inheritance"}},
+  {"model": "exercises.oopconcept", "pk": 4, "fields": {"name": "method overriding"}},
+  {"model": "exercises.oopconcept", "pk": 5, "fields": {"name": "polymorphism"}},
+  {"model": "exercises.oopconcept", "pk": 6, "fields": {"name": "abstraction"}},
+  {
+    "model": "exercises.exercise",
+    "pk": 1,
+    "fields": {
+      "title": "Build an Employee Class",
+      "description": "Create an Employee class that stores a name and salary. Practice using an initializer, private/protected-style attributes, a property getter, and readable string output.",
+      "difficulty": "easy",
+      "concepts": [1, 2],
+      "starter_code": "class Employee:\n    # TODO: add __init__(name, salary)\n    # TODO: store name and _salary\n    # TODO: add a @property getter named get_salary\n    # TODO: add __str__\n    pass\n",
+      "expected_behavior": "Employee should initialize name and _salary, expose salary through a @property getter, and return a useful string from __str__.",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "exercises.exercise",
+    "pk": 2,
+    "fields": {
+      "title": "Manager Inherits Employee",
+      "description": "Create a Manager subclass of Employee. Use inheritance, call the parent initializer with super(), and override calculate_bonus() for manager-specific behavior.",
+      "difficulty": "medium",
+      "concepts": [3, 4],
+      "starter_code": "class Employee:\n    def __init__(self, name, salary):\n        self.name = name\n        self._salary = salary\n\n    def calculate_bonus(self):\n        return self._salary * 0.10\n\n\nclass Manager(Employee):\n    # TODO: call super().__init__()\n    # TODO: override calculate_bonus()\n    pass\n",
+      "expected_behavior": "Manager must inherit from Employee, initialize through super().__init__(), and redefine calculate_bonus().",
+      "created_at": "2026-01-02T00:00:00Z"
+    }
+  },
+  {
+    "model": "exercises.exercise",
+    "pk": 3,
+    "fields": {
+      "title": "Shape Polymorphism",
+      "description": "Model an abstract Shape API with area() and perimeter(), then create Circle and Rectangle subclasses that implement the same methods for polymorphic use.",
+      "difficulty": "hard",
+      "concepts": [5, 6, 3],
+      "starter_code": "class Shape:\n    def area(self):\n        raise NotImplementedError\n\n    def perimeter(self):\n        raise NotImplementedError\n\n\nclass Circle(Shape):\n    pass\n\n\nclass Rectangle(Shape):\n    pass\n\n\nshapes = []\nfor shape in shapes:\n    # TODO: call area() and perimeter() polymorphically\n    pass\n",
+      "expected_behavior": "Shape defines area() and perimeter(). Circle and Rectangle inherit Shape and override both methods so a loop can call the same methods on different shape objects.",
+      "created_at": "2026-01-03T00:00:00Z"
+    }
+  },
+  {"model": "exercises.testcase", "pk": 1, "fields": {"exercise": 1, "description": "Employee class exists", "check_type": "has_class", "check_target": "Employee", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 2, "fields": {"exercise": 1, "description": "Employee defines __init__", "check_type": "dunder_init", "check_target": "Employee", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 3, "fields": {"exercise": 1, "description": "Employee uses encapsulated attributes", "check_type": "encapsulation", "check_target": "Employee", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 4, "fields": {"exercise": 1, "description": "Employee exposes a @property getter", "check_type": "property_decorator", "check_target": "Employee", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 5, "fields": {"exercise": 1, "description": "Employee defines __str__", "check_type": "has_method", "check_target": "Employee", "check_args": {"method_name": "__str__"}}},
+  {"model": "exercises.testcase", "pk": 6, "fields": {"exercise": 2, "description": "Manager class exists", "check_type": "has_class", "check_target": "Manager", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 7, "fields": {"exercise": 2, "description": "Manager inherits Employee", "check_type": "has_inheritance", "check_target": "Manager", "check_args": {"parent_class": "Employee"}}},
+  {"model": "exercises.testcase", "pk": 8, "fields": {"exercise": 2, "description": "Manager calls super().__init__", "check_type": "super_call", "check_target": "Manager", "check_args": {"method_name": "__init__"}}},
+  {"model": "exercises.testcase", "pk": 9, "fields": {"exercise": 2, "description": "Manager overrides calculate_bonus", "check_type": "method_override", "check_target": "Manager", "check_args": {"parent_class": "Employee", "method_name": "calculate_bonus"}}},
+  {"model": "exercises.testcase", "pk": 10, "fields": {"exercise": 3, "description": "Shape class exists", "check_type": "has_class", "check_target": "Shape", "check_args": {}}},
+  {"model": "exercises.testcase", "pk": 11, "fields": {"exercise": 3, "description": "Shape defines area", "check_type": "has_method", "check_target": "Shape", "check_args": {"method_name": "area"}}},
+  {"model": "exercises.testcase", "pk": 12, "fields": {"exercise": 3, "description": "Shape defines perimeter", "check_type": "has_method", "check_target": "Shape", "check_args": {"method_name": "perimeter"}}},
+  {"model": "exercises.testcase", "pk": 13, "fields": {"exercise": 3, "description": "Circle inherits Shape", "check_type": "has_inheritance", "check_target": "Circle", "check_args": {"parent_class": "Shape"}}},
+  {"model": "exercises.testcase", "pk": 14, "fields": {"exercise": 3, "description": "Rectangle inherits Shape", "check_type": "has_inheritance", "check_target": "Rectangle", "check_args": {"parent_class": "Shape"}}},
+  {"model": "exercises.testcase", "pk": 15, "fields": {"exercise": 3, "description": "Circle overrides area", "check_type": "method_override", "check_target": "Circle", "check_args": {"parent_class": "Shape", "method_name": "area"}}},
+  {"model": "exercises.testcase", "pk": 16, "fields": {"exercise": 3, "description": "Circle overrides perimeter", "check_type": "method_override", "check_target": "Circle", "check_args": {"parent_class": "Shape", "method_name": "perimeter"}}},
+  {"model": "exercises.testcase", "pk": 17, "fields": {"exercise": 3, "description": "Rectangle overrides area", "check_type": "method_override", "check_target": "Rectangle", "check_args": {"parent_class": "Shape", "method_name": "area"}}},
+  {"model": "exercises.testcase", "pk": 18, "fields": {"exercise": 3, "description": "Rectangle overrides perimeter", "check_type": "method_override", "check_target": "Rectangle", "check_args": {"parent_class": "Shape", "method_name": "perimeter"}}}
+]
