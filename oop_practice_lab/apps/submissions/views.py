@@ -2,7 +2,7 @@
 from collections import defaultdict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Avg
+from django.db.models import Avg, Count, Q
 from django.views.generic import TemplateView
 from rest_framework import generics, permissions, response, status, views
 
@@ -85,20 +85,24 @@ class DashboardAPIView(views.APIView):
 
     def get(self, request):
         """Build dashboard metrics for the authenticated user."""
-        submissions = Submission.objects.filter(user=request.user).prefetch_related(
-            "exercise__concepts"
-        )
+        submissions = Submission.objects.filter(user=request.user)
         average = submissions.aggregate(avg=Avg("score"))["avg"] or 0.0
-        progress = defaultdict(lambda: {"attempted": 0, "passed": 0})
+        progress = {
+            row["exercise__concepts__name"]: {
+                "attempted": row["attempted"],
+                "passed": row["passed"],
+            }
+            for row in submissions.values("exercise__concepts__name")
+            .annotate(
+                attempted=Count("id"),
+                passed=Count("id", filter=Q(score__gte=0.8)),
+            )
+            .order_by()
+            if row["exercise__concepts__name"] is not None
+        }
 
-        for submission in submissions:
-            for concept in submission.exercise.concepts.all():
-                progress[concept.name]["attempted"] += 1
-                if submission.score is not None and submission.score >= 0.8:
-                    progress[concept.name]["passed"] += 1
-
-        for concept in OOPConcept.objects.all():
-            progress[concept.name]
+        for concept in OOPConcept.objects.values_list("name", flat=True):
+            progress.setdefault(concept, {"attempted": 0, "passed": 0})
 
         payload = {
             "total_submissions": request.user.total_submissions,

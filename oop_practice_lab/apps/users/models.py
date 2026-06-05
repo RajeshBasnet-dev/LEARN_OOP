@@ -10,7 +10,9 @@ class UserProfile(AbstractUser):
 
     bio = models.TextField(blank=True)
     total_submissions = models.IntegerField(default=0)
-    exercises_completed = models.ManyToManyField(Exercise, blank=True)
+    exercises_completed = models.ManyToManyField(
+        Exercise, blank=True, related_name="completed_by"
+    )
 
     def __str__(self):
         """Return the user's username."""
