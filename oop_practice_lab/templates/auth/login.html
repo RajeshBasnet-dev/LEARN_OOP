@@ -2,10 +2,21 @@
 {% block title %}Login · OOP Practice Lab{% endblock %}
 {% block content %}
 <section class="auth-card">
-  <h1>Welcome back</h1>
-  <form method="post">
+  <p class="eyebrow">Welcome back</p>
+  <h1>Login</h1>
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
+    {% if form.non_field_errors %}
+      <div class="errors" role="alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <label for="{{ form.username.id_for_label }}">Username
+      {{ form.username }}
+      {% if form.username.errors %}<span class="errors" role="alert">{{ form.username.errors }}</span>{% endif %}
+    </label>
+    <label for="{{ form.password.id_for_label }}">Password
+      {{ form.password }}
+      {% if form.password.errors %}<span class="errors" role="alert">{{ form.password.errors }}</span>{% endif %}
+    </label>
     <button class="button" type="submit">Login</button>
   </form>
 </section>

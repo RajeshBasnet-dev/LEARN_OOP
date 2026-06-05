@@ -13,6 +13,27 @@ function getCookie(name) {
   return '';
 }
 
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+  toast.setAttribute('data-autodismiss', 'true');
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  window.setTimeout(() => toast.remove(), 5200);
+}
+
+function setSubmitLoading(isLoading) {
+  const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+  if (!submitButton) {
+    return;
+  }
+
+  submitButton.classList.toggle('loading', isLoading);
+  submitButton.disabled = isLoading;
+  submitButton.setAttribute('aria-busy', String(isLoading));
+}
+
 if (editorNode && window.require) {
   window.require.config({
     paths: {
@@ -27,6 +48,8 @@ if (editorNode && window.require) {
       automaticLayout: true,
       minimap: { enabled: false },
       fontSize: 15,
+      fontFamily: 'SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace',
+      scrollBeyondLastLine: false,
     });
   });
 }
@@ -35,6 +58,7 @@ if (form) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     statusNode.textContent = 'Evaluating your AST structure...';
+    setSubmitLoading(true);
     const exerciseId = form.querySelector('[name="exercise"]').value;
     const code = codeEditor ? codeEditor.getValue() : starterCode.value;
 
@@ -50,11 +74,16 @@ if (form) {
       const data = await response.json();
       if (!response.ok) {
         statusNode.textContent = 'Submission failed. Please review the form and try again.';
+        showToast('Submission failed. Please review the form and try again.', 'error');
+        setSubmitLoading(false);
         return;
       }
+      showToast('Submission accepted. Opening your result...', 'success');
       window.location.href = `/results/${data.id}/`;
     } catch (error) {
       statusNode.textContent = 'Network error while submitting. Please try again.';
+      showToast('Network error while submitting. Please try again.', 'error');
+      setSubmitLoading(false);
     }
   });
 }
