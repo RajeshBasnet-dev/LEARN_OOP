@@ -17,7 +17,10 @@
       <small>{{ values.percent }}%</small>
     </div>
   {% empty %}
-    <p>Submit an exercise to start tracking concept progress.</p>
+    <div class="empty-state">
+      <h3>Progress starts here</h3>
+      <p>Submit an exercise to start tracking concept progress.</p>
+    </div>
   {% endfor %}
 </section>
 
@@ -35,13 +38,13 @@
           <td><a href="{% url 'result' submission.id %}">View</a></td>
         </tr>
       {% empty %}
-        <tr><td colspan="5">No submissions yet.</td></tr>
+        <tr><td colspan="5"><div class="empty-state"><h3>No submissions yet</h3><p>Complete an exercise to build your history.</p></div></td></tr>
       {% endfor %}
     </tbody>
   </table>
 </section>
 <script>
-  document.querySelectorAll('th').forEach((header, index) => {
+  document.querySelectorAll('.history-table th').forEach((header, index) => {
     header.addEventListener('click', () => {
       const tbody = header.closest('table').querySelector('tbody');
       [...tbody.rows]

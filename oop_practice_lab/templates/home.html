@@ -44,7 +44,10 @@
       <a class="button ghost" href="{% url 'exercise-detail' exercise.id %}">View exercise</a>
     </article>
   {% empty %}
-    <p>No exercises match your filters.</p>
+    <div class="empty-state">
+      <h2>No exercises found</h2>
+      <p>No exercises match your filters.</p>
+    </div>
   {% endfor %}
 </section>
 {% endblock %}
