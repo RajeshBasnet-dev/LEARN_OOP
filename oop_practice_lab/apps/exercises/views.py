@@ -104,7 +104,12 @@ class ResultView(LoginRequiredMixin, TemplateView):
         )
         submission = context["submission"]
         context["score_percent"] = round((submission.score or 0) * 100)
-        context["next_exercise"] = Exercise.objects.exclude(
-            pk=submission.exercise_id
-        ).order_by("id").first()
+        completed_ids = self.request.user.exercises_completed.values_list(
+            "pk", flat=True
+        )
+        context["next_exercise"] = (
+            Exercise.objects.exclude(pk__in=[submission.exercise_id, *completed_ids])
+            .order_by("id")
+            .first()
+        )
         return context

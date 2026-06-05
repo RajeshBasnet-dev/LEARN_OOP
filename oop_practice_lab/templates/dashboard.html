@@ -45,7 +45,18 @@
     header.addEventListener('click', () => {
       const tbody = header.closest('table').querySelector('tbody');
       [...tbody.rows]
-        .sort((a, b) => a.cells[index].innerText.localeCompare(b.cells[index].innerText))
+        .sort((a, b) => {
+          const left = a.cells[index].innerText.trim();
+          const right = b.cells[index].innerText.trim();
+          const leftNumber = Number(left);
+          const rightNumber = Number(right);
+
+          if (!Number.isNaN(leftNumber) && !Number.isNaN(rightNumber)) {
+            return leftNumber - rightNumber;
+          }
+
+          return left.localeCompare(right);
+        })
         .forEach(row => tbody.appendChild(row));
     });
   });
